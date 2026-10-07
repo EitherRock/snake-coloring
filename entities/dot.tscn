@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://dlrmy72n62gmt"]
+
+[ext_resource type="Script" uid="uid://f37ukt5hm0bp" path="res://entities/dot.gd" id="1_swi4y"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_g4v7s"]
+
+[node name="Dotling" type="Area2D" unique_id=1569888219 groups=["dot", "dots"]]
+script = ExtResource("1_swi4y")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1586162370]
+shape = SubResource("CircleShape2D_g4v7s")

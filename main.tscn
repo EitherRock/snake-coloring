@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://t0rgetnx7bo5"]
+
+[ext_resource type="Script" uid="uid://ceg2n0y8jhp86" path="res://main.gd" id="1_h2yge"]
+[ext_resource type="PackedScene" uid="uid://cuhq2xu1euspm" path="res://entities/player.tscn" id="1_ig7tw"]
+[ext_resource type="PackedScene" uid="uid://dlrmy72n62gmt" path="res://entities/dot.tscn" id="3_h2yge"]
+[ext_resource type="PackedScene" uid="uid://ywwtskr6ixj1" path="res://dotling_home.tscn" id="4_1bvp3"]
+[ext_resource type="Script" uid="uid://b86eld87nyhv1" path="res://dot_spawner.gd" id="5_lquwl"]
+[ext_resource type="PackedScene" uid="uid://b6pg4fj6w14m8" path="res://ui.tscn" id="6_7mycd"]
+
+[node name="Main" type="Node2D" unique_id=303001337]
+script = ExtResource("1_h2yge")
+
+[node name="Player" parent="." unique_id=851494805 instance=ExtResource("1_ig7tw")]
+position = Vector2(908, 293)
+trail_container_path = NodePath("../TrailContainer")
+
+[node name="Dots" type="Node2D" parent="." unique_id=2064910988]
+visible = false
+
+[node name="TrailContainer" type="Node2D" parent="." unique_id=158605394]
+
+[node name="DotlingHome" parent="." unique_id=1098099125 instance=ExtResource("4_1bvp3")]
+
+[node name="DotSpawner" type="Node2D" parent="." unique_id=1403127603]
+script = ExtResource("5_lquwl")
+dot_scene = ExtResource("3_h2yge")
+player_path = NodePath("../Player")
+container_path = NodePath("../TrailContainer")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1309987049]
+
+[node name="UI" parent="CanvasLayer" unique_id=42824729 instance=ExtResource("6_7mycd")]
+size_flags_horizontal = 3
+size_flags_vertical = 3
