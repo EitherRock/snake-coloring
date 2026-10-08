@@ -1,7 +1,7 @@
-[gd_scene format=3 uid="uid://ywwtskr6ixj1"]
+[gd_scene format=4 uid="uid://ywwtskr6ixj1"]
 
 [ext_resource type="Script" uid="uid://nfu6seqo8hxn" path="res://dotling_home.gd" id="1_3vtp1"]
-[ext_resource type="Script" uid="uid://bsvx84u1jxk52" path="res://dotling_home_container.gd" id="1_bir3h"]
+[ext_resource type="Script" uid="uid://bsvx84u1jxk52" path="res://region.gd" id="1_bir3h"]
 [ext_resource type="Shader" uid="uid://da65h0shngolo" path="res://radial_fill.gdshader" id="2_sq1j0"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_g4v7s"]
@@ -10,10 +10,12 @@ radius = 300.0
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_g4v7s"]
 resource_name = "radial_fill"
 shader = ExtResource("2_sq1j0")
-shader_parameter/fill_amount = 0.0
-shader_parameter/fill_color = Color(0.3, 0.8, 1, 1)
 shader_parameter/radius = 0.5
 shader_parameter/edge_softness = 0.02
+shader_parameter/glow_intensity = 0.0
+shader_parameter/glow_color = Color(1, 1, 1, 1)
+shader_parameter/band_colors = PackedVector4Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/band_amounts = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_yf5fn"]
 radius = 320.0

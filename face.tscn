@@ -1,0 +1,115 @@
+[gd_scene format=4 uid="uid://b0ncncnw2q58n"]
+
+[ext_resource type="Script" uid="uid://bsvx84u1jxk52" path="res://region.gd" id="1_a4f38"]
+[ext_resource type="Shader" uid="uid://da65h0shngolo" path="res://radial_fill.gdshader" id="2_7jkf7"]
+[ext_resource type="Script" uid="uid://cmd4s6owl3ldu" path="res://picture_manager.gd" id="3_kttct"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7jkf7"]
+radius = 300.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kttct"]
+resource_name = "radial_fill"
+shader = ExtResource("2_7jkf7")
+shader_parameter/radius = 0.5
+shader_parameter/edge_softness = 0.02
+shader_parameter/glow_intensity = 0.0
+shader_parameter/glow_color = Color(1, 1, 1, 1)
+shader_parameter/band_colors = PackedVector4Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/band_amounts = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_a4f38"]
+radius = 320.0
+
+[node name="Face" type="Node2D" unique_id=1406302841 node_paths=PackedStringArray("regions")]
+script = ExtResource("3_kttct")
+regions = [NodePath("Face"), NodePath("LeftEye"), NodePath("RightEye")]
+
+[node name="Face" type="StaticBody2D" parent="." unique_id=239420244]
+script = ExtResource("1_a4f38")
+max_dots = 5
+
+[node name="ClickArea" type="Area2D" parent="Face" unique_id=1128026788]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Face/ClickArea" unique_id=920831554]
+shape = SubResource("CircleShape2D_7jkf7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Face" unique_id=1493949046]
+shape = SubResource("CircleShape2D_7jkf7")
+
+[node name="FillEffect" type="ColorRect" parent="Face" unique_id=1080720166]
+material = SubResource("ShaderMaterial_kttct")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -300.0
+offset_right = 300.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="LeftEye" type="StaticBody2D" parent="." unique_id=2084708299]
+position = Vector2(-119, -81)
+scale = Vector2(0.24000007, 0.24000007)
+script = ExtResource("1_a4f38")
+max_dots = 5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftEye" unique_id=1749381398]
+shape = SubResource("CircleShape2D_7jkf7")
+
+[node name="FillEffect" type="ColorRect" parent="LeftEye" unique_id=289828711]
+material = SubResource("ShaderMaterial_kttct")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -300.0
+offset_right = 300.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ClickArea" type="Area2D" parent="LeftEye" unique_id=30290319]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftEye/ClickArea" unique_id=1704817653]
+shape = SubResource("CircleShape2D_7jkf7")
+
+[node name="RightEye" type="StaticBody2D" parent="." unique_id=804833192]
+position = Vector2(105, -81)
+scale = Vector2(0.24000007, 0.24000007)
+script = ExtResource("1_a4f38")
+max_dots = 5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightEye" unique_id=1914056]
+shape = SubResource("CircleShape2D_7jkf7")
+
+[node name="FillEffect" type="ColorRect" parent="RightEye" unique_id=1513052478]
+material = SubResource("ShaderMaterial_kttct")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -300.0
+offset_right = 300.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ClickArea" type="Area2D" parent="RightEye" unique_id=551056122]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightEye/ClickArea" unique_id=752718304]
+shape = SubResource("CircleShape2D_7jkf7")
+
+[node name="MagnetArea" type="Area2D" parent="." unique_id=1272799929]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MagnetArea" unique_id=757067034]
+shape = SubResource("CircleShape2D_a4f38")

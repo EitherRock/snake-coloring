@@ -27,3 +27,17 @@ func _process(delta: float) -> void:
 		return
 		
 	global_position += direction.normalized() * pull_speed * delta
+	
+
+func hop_to(end: Vector2, height: float, duration: float) -> void:
+	set_deferred("monitorable", false)  # can't be magnet-grabbed mid-hop
+	var start = global_position
+
+	var tween = create_tween()
+	tween.tween_method(func(t: float):
+		var pos = start.lerp(end, t)
+		pos.y -= sin(t * PI) * height  # arc up and back down
+		global_position = pos
+	, 0.0, 1.0, duration)
+	tween.tween_interval(0.5)  # short grace period after landing
+	tween.tween_callback(func(): monitorable = true)

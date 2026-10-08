@@ -6,9 +6,10 @@ extends Node2D
 
 
 func _ready() -> void:
+	RenderingServer.set_default_clear_color(Color("ffffffff"))
 	UI = canvas.get_child(0)
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	var dots = player.trail_dots.size()
 	var dots_string = '%d / 0' % dots
 	UI.update_label_text(dots_string)

@@ -10,8 +10,8 @@ config_version=5
 
 [application]
 
-config/name="CircleFeed"
-run/main_scene="uid://cuhq2xu1euspm"
+config/name="SnakeColoring"
+run/main_scene="uid://t0rgetnx7bo5"
 config/features=PackedStringArray("4.7", "Mobile")
 config/icon="res://icon.svg"
 

@@ -1,30 +1,11 @@
-//shader_type canvas_item;
-//
-//uniform float fill_amount : hint_range(0.0, 1.0) = 0.0;
-//uniform vec4 fill_color : source_color = vec4(0.3, 0.8, 1.0, 1.0);
-//uniform float radius : hint_range(0.0, 1.0) = 0.5;
-//uniform float edge_softness : hint_range(0.0, 0.1) = 0.02;
-//
-//void fragment() {
-	//vec2 centered_uv = UV - vec2(0.5);
-	//float dist = length(centered_uv) / radius;
-//
-	//// Circle mask (so shader stays within a circular shape, not a square texture)
-	//float circle_mask = 1.0 - smoothstep(1.0 - edge_softness, 1.0, dist);
-//
-	//// Radial fill mask — fills from center outward based on fill_amount
-	//float fill_mask = 1.0 - smoothstep(fill_amount - edge_softness, fill_amount, dist);
-//
-	//float final_alpha = circle_mask * fill_mask * fill_color.a;
-//
-	//COLOR = vec4(fill_color.rgb, final_alpha);
-//}
 shader_type canvas_item;
 
-#define MAX_COLORS 50
+#define MAX_COLORS 5
 
 uniform float radius : hint_range(0.0, 1.0) = 0.5;
 uniform float edge_softness : hint_range(0.0, 0.1) = 0.02;
+uniform float glow_intensity : hint_range(0.0, 1.0) = 0.0;
+uniform vec4 glow_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);
 
 uniform vec4 band_colors[MAX_COLORS];
 uniform float band_amounts[MAX_COLORS]; // each 0.0–1.0, independent thickness per color
@@ -34,7 +15,7 @@ void fragment() {
 	float dist = length(centered_uv) / radius;
 
 	float circle_mask = 1.0 - smoothstep(1.0 - edge_softness, 1.0, dist);
-
+	
 	// Walk through bands, stacking them from center outward
 	float cumulative = 0.0;
 	vec4 final_color = vec4(0.0);
@@ -49,6 +30,11 @@ void fragment() {
 		final_color += band_colors[i] * band_mask;
 		cumulative = band_end;
 	}
-
-	COLOR = vec4(final_color.rgb, final_color.a * circle_mask);
+	
+	vec4 glow = glow_color * glow_intensity * circle_mask;
+	vec4 combined = final_color + glow * (1.0 - final_color.a); // glow fills in where fill is transparent
+	float final_alpha = max(final_color.a, glow.a * circle_mask);
+	
+	//COLOR = vec4(1.0, 0.0, 0.0, band_mask * circle_mask);
+	COLOR = vec4(combined.rgb, final_alpha * circle_mask);
 }

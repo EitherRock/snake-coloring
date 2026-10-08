@@ -8,6 +8,7 @@ extends Node2D
 
 @export var player_path: NodePath
 @export var container_path: NodePath
+@export var dots_container_path: NodePath
 
 var colors = [Color.RED, Color.DEEP_SKY_BLUE, Color.GREEN, Color.YELLOW, Color.PURPLE, Color.ORANGE_RED]
 
@@ -18,6 +19,7 @@ func _ready() -> void:
 func spawn_dots() -> void:
 	var player = get_node(player_path)
 	var container = get_node(container_path)
+	var dots_container = get_node(dots_container_path)
 	
 	var spawned = 0
 	var max_attempts = spawn_count * 10  # safety net to avoid infinite loop
@@ -39,6 +41,6 @@ func spawn_dots() -> void:
 		var dot = dot_scene.instantiate()
 		dot.global_position = pos
 		dot.dot_color = colors[randi() % colors.size()]
-		add_child(dot)
+		dots_container.add_child(dot)
 		
 		spawned += 1

@@ -2,33 +2,57 @@
 
 [ext_resource type="Script" uid="uid://ceg2n0y8jhp86" path="res://main.gd" id="1_h2yge"]
 [ext_resource type="PackedScene" uid="uid://cuhq2xu1euspm" path="res://entities/player.tscn" id="1_ig7tw"]
+[ext_resource type="Shader" uid="uid://d1ivv74khsl8k" path="res://grid.gdshader" id="2_272bh"]
 [ext_resource type="PackedScene" uid="uid://dlrmy72n62gmt" path="res://entities/dot.tscn" id="3_h2yge"]
-[ext_resource type="PackedScene" uid="uid://ywwtskr6ixj1" path="res://dotling_home.tscn" id="4_1bvp3"]
 [ext_resource type="Script" uid="uid://b86eld87nyhv1" path="res://dot_spawner.gd" id="5_lquwl"]
 [ext_resource type="PackedScene" uid="uid://b6pg4fj6w14m8" path="res://ui.tscn" id="6_7mycd"]
+[ext_resource type="PackedScene" uid="uid://b0ncncnw2q58n" path="res://face.tscn" id="7_272bh"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g4v7s"]
+shader = ExtResource("2_272bh")
+shader_parameter/background_color = Color(0.85, 0.85, 0.85, 1)
+shader_parameter/minor_color = Color(0.72, 0.72, 0.72, 1)
+shader_parameter/major_color = Color(0.55, 0.55, 0.55, 1)
+shader_parameter/minor_size = 32.0
+shader_parameter/major_every = 5.0
+shader_parameter/minor_width = 1.0
+shader_parameter/major_width = 2.0
 
 [node name="Main" type="Node2D" unique_id=303001337]
 script = ExtResource("1_h2yge")
 
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1922699241]
+material = SubResource("ShaderMaterial_g4v7s")
+offset_left = -9132.0
+offset_top = -8233.0
+offset_right = 12887.0
+offset_bottom = 11341.0
+mouse_filter = 2
+
 [node name="Player" parent="." unique_id=851494805 instance=ExtResource("1_ig7tw")]
 position = Vector2(908, 293)
 trail_container_path = NodePath("../TrailContainer")
+dots_container_path = NodePath("../DotsContainer")
 
-[node name="Dots" type="Node2D" parent="." unique_id=2064910988]
-visible = false
+[node name="DotsContainer" type="Node2D" parent="." unique_id=2064910988]
 
 [node name="TrailContainer" type="Node2D" parent="." unique_id=158605394]
-
-[node name="DotlingHome" parent="." unique_id=1098099125 instance=ExtResource("4_1bvp3")]
 
 [node name="DotSpawner" type="Node2D" parent="." unique_id=1403127603]
 script = ExtResource("5_lquwl")
 dot_scene = ExtResource("3_h2yge")
 player_path = NodePath("../Player")
 container_path = NodePath("../TrailContainer")
+dots_container_path = NodePath("../DotsContainer")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1309987049]
+visible = false
 
 [node name="UI" parent="CanvasLayer" unique_id=42824729 instance=ExtResource("6_7mycd")]
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="Pictures" type="Node2D" parent="." unique_id=858915315]
+
+[node name="Face" parent="Pictures" unique_id=1406302841 instance=ExtResource("7_272bh")]
+position = Vector2(1375, 159)
