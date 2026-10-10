@@ -1,0 +1,25 @@
+[gd_scene format=4 uid="uid://c2v81dfp02ich"]
+
+[ext_resource type="Script" uid="uid://bsvx84u1jxk52" path="res://region.gd" id="1_33eaq"]
+[ext_resource type="Shader" uid="uid://dadyw75ubag67" path="res://region_fill.gdshader" id="2_qyjxc"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g4v7s"]
+shader = ExtResource("2_qyjxc")
+shader_parameter/mask_size = Vector2(1024, 1024)
+shader_parameter/fill_origin = Vector2(0.5, 0.5)
+shader_parameter/max_distance = 500.0
+shader_parameter/edge_softness = 0.01
+shader_parameter/band_colors = PackedVector4Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/band_amounts = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/glow_intensity = 0.0
+shader_parameter/glow_color = Color(1, 1, 1, 1)
+
+[node name="Region" type="Node2D" unique_id=184913905]
+script = ExtResource("1_33eaq")
+max_dots = 10
+
+[node name="FillEffect" type="ColorRect" parent="." unique_id=1051321617]
+material = SubResource("ShaderMaterial_g4v7s")
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2

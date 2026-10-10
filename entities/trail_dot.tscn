@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://gqnfyokjl1e7"]
 
-[ext_resource type="Script" uid="uid://d3r32jwj26tr1" path="res://trail_dot.gd" id="1_xccmf"]
+[ext_resource type="Script" uid="uid://d3r32jwj26tr1" path="res://entities/trail_dot.gd" id="1_xccmf"]
+
 
 [node name="TrailDot" type="Node2D" unique_id=298824892]
 script = ExtResource("1_xccmf")

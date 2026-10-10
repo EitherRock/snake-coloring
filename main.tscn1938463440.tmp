@@ -7,7 +7,6 @@
 [ext_resource type="Script" uid="uid://b86eld87nyhv1" path="res://dot_spawner.gd" id="5_lquwl"]
 [ext_resource type="PackedScene" uid="uid://b6pg4fj6w14m8" path="res://ui/ui.tscn" id="6_7mycd"]
 [ext_resource type="PackedScene" uid="uid://8uslfn03rggr" path="res://picture.tscn" id="7_272bh"]
-[ext_resource type="Resource" uid="uid://dd34rrm00e2yg" path="res://pictures/smiley/picture_data.tres" id="8_5vw27"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_g4v7s"]
 shader = ExtResource("2_272bh")
@@ -31,15 +30,13 @@ offset_bottom = 11341.0
 mouse_filter = 2
 
 [node name="Player" parent="." unique_id=851494805 instance=ExtResource("1_ig7tw")]
-z_index = 5
-position = Vector2(1485, 320)
+position = Vector2(908, 293)
 trail_container_path = NodePath("../TrailContainer")
 dots_container_path = NodePath("../DotsContainer")
 
 [node name="DotsContainer" type="Node2D" parent="." unique_id=2064910988]
 
 [node name="TrailContainer" type="Node2D" parent="." unique_id=158605394]
-z_index = 4
 
 [node name="DotSpawner" type="Node2D" parent="." unique_id=1403127603]
 script = ExtResource("5_lquwl")
@@ -58,4 +55,3 @@ size_flags_vertical = 3
 [node name="Pictures" type="Node2D" parent="." unique_id=858915315]
 
 [node name="Picture" parent="." unique_id=1872283298 instance=ExtResource("7_272bh")]
-data = ExtResource("8_5vw27")

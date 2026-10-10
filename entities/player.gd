@@ -21,7 +21,7 @@ extends CharacterBody2D
 @onready var magnet_collision: CollisionShape2D = $MagneticRadius/CollisionShape2D
 
 var trail_dots: Array[Node2D] = []
-var trail_dot_scene: PackedScene = preload('res://trail_dot.tscn')
+var trail_dot_scene: PackedScene = preload('res://entities/trail_dot.tscn')
 var dot_scene: PackedScene = preload('res://entities/dot.tscn')
 var is_depositing: bool = false
 
@@ -89,9 +89,13 @@ func deposit_trail_to(container: Node2D) -> void:
 	
 func _deposit_loop(container: Node2D) -> void:
 	while trail_dots.size() > 0:
-		var dot = trail_dots.pop_back()  # take from the back of the trail
+		if container.is_complete and container.picture_manager:
+			container = container.picture_manager.get_current_region()
+			if container == null:
+				break  # picture complete
+		var dot = trail_dots.pop_back()
 		dot.fly_to_container(container)
-		await get_tree().create_timer(0.05).timeout  # small delay between each dot leaving
+		await get_tree().create_timer(0.05).timeout
 	is_depositing = false
 	
 

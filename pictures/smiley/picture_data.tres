@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="PictureData" format=3 uid="uid://dd34rrm00e2yg"]
+
+[ext_resource type="Texture2D" uid="uid://gpxx8ebgpjkh" path="res://pictures/smiley/lines.png" id="1_2i4u2"]
+[ext_resource type="Script" uid="uid://bgsgade2g3kn1" path="res://region_data.gd" id="2_kwpsf"]
+[ext_resource type="Texture2D" uid="uid://bciyvhouk6jqi" path="res://pictures/smiley/mask_1_left_eye.png" id="3_7w710"]
+[ext_resource type="Texture2D" uid="uid://cjukucs43bgm" path="res://pictures/smiley/mask_2_right_eye.png" id="4_tn0pp"]
+[ext_resource type="Texture2D" uid="uid://bwyepq5vyw6xh" path="res://pictures/smiley/mask_3_face.png" id="5_ccw4a"]
+[ext_resource type="Script" uid="uid://caw4woevd35gm" path="res://picture_data.gd" id="6_tvcso"]
+
+[sub_resource type="Resource" id="Resource_24lij"]
+script = ExtResource("2_kwpsf")
+mask = ExtResource("3_7w710")
+fill_origin = Vector2(0.36083984, 0.39013672)
+max_distance = 72.996574
+
+[sub_resource type="Resource" id="Resource_2s2xd"]
+script = ExtResource("2_kwpsf")
+mask = ExtResource("4_tn0pp")
+fill_origin = Vector2(0.6381836, 0.39013672)
+max_distance = 72.996574
+fill_order = 1
+
+[sub_resource type="Resource" id="Resource_wg1wl"]
+script = ExtResource("2_kwpsf")
+mask = ExtResource("5_ccw4a")
+fill_origin = Vector2(0.49905598, 0.50477624)
+max_distance = 448.3973
+fill_order = 2
+
+[resource]
+script = ExtResource("6_tvcso")
+title = "smiley"
+line_art = ExtResource("1_2i4u2")
+regions = Array[ExtResource("2_kwpsf")]([SubResource("Resource_24lij"), SubResource("Resource_2s2xd"), SubResource("Resource_wg1wl")])

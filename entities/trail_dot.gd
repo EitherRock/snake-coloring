@@ -34,10 +34,16 @@ func fly_to_container(container: Node2D) -> void:
 	container_target = container
 
 func _fly_toward_container(delta: float) -> void:
-	var direction = (container_target.global_position - global_position)
+	var dest: Vector2 = container_target.global_position
+	if container_target.has_method("get_deposit_position"):
+		dest = container_target.get_deposit_position()
+
+	var direction = dest - global_position
 	var distance = direction.length()
+
 	if distance < 10.0:
 		container_target.deposit_dot(dot_color)
 		queue_free()
 		return
+
 	global_position += direction.normalized() * 400.0 * delta
