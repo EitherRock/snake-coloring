@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://b1ig50ahp7ik5"
+path="res://.godot/imported/bl.bloop 07.wav-e70897d0b3f7f6a8b850a425b7b6fed5.sample"
+
+[deps]
+
+source_file="res://audio/bl.bloop 07.wav"
+dest_files=["res://.godot/imported/bl.bloop 07.wav-e70897d0b3f7f6a8b850a425b7b6fed5.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

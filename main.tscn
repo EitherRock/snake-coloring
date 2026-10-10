@@ -8,6 +8,14 @@
 [ext_resource type="PackedScene" uid="uid://b6pg4fj6w14m8" path="res://ui/ui.tscn" id="6_7mycd"]
 [ext_resource type="PackedScene" uid="uid://8uslfn03rggr" path="res://picture.tscn" id="7_272bh"]
 [ext_resource type="Resource" uid="uid://dd34rrm00e2yg" path="res://pictures/smiley/picture_data.tres" id="8_5vw27"]
+[ext_resource type="AudioStream" uid="uid://cvcnajpp4sq4u" path="res://audio/bl.bloop 01.wav" id="9_2cqfq"]
+[ext_resource type="AudioStream" uid="uid://opvrw1vfu5ld" path="res://audio/bl.bloop 02.wav" id="10_yaehf"]
+[ext_resource type="AudioStream" uid="uid://fsi7svlkqoj0" path="res://audio/bl.bloop 03.wav" id="11_074og"]
+[ext_resource type="AudioStream" uid="uid://dysd2qca4ean2" path="res://audio/bl.bloop 04.wav" id="12_cegan"]
+[ext_resource type="AudioStream" uid="uid://d841ns418odx" path="res://audio/bl.bloop 05.wav" id="13_82xsv"]
+[ext_resource type="AudioStream" uid="uid://d12vvg05f2jcp" path="res://audio/bl.bloop 06.wav" id="14_getpj"]
+[ext_resource type="AudioStream" uid="uid://b1ig50ahp7ik5" path="res://audio/bl.bloop 07.wav" id="15_ryguw"]
+[ext_resource type="AudioStream" uid="uid://nocsp6u5jjtn" path="res://audio/bl.bloop 08.wav" id="16_d13ii"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_g4v7s"]
 shader = ExtResource("2_272bh")
@@ -18,6 +26,17 @@ shader_parameter/minor_size = 32.0
 shader_parameter/major_every = 5.0
 shader_parameter/minor_width = 1.0
 shader_parameter/major_width = 2.0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_g4v7s"]
+streams_count = 8
+stream_0/stream = ExtResource("9_2cqfq")
+stream_1/stream = ExtResource("10_yaehf")
+stream_2/stream = ExtResource("11_074og")
+stream_3/stream = ExtResource("12_cegan")
+stream_4/stream = ExtResource("13_82xsv")
+stream_5/stream = ExtResource("14_getpj")
+stream_6/stream = ExtResource("15_ryguw")
+stream_7/stream = ExtResource("16_d13ii")
 
 [node name="Main" type="Node2D" unique_id=303001337]
 script = ExtResource("1_h2yge")
@@ -35,6 +54,7 @@ z_index = 5
 position = Vector2(1485, 320)
 trail_container_path = NodePath("../TrailContainer")
 dots_container_path = NodePath("../DotsContainer")
+bloop_sound_path = NodePath("../AudioStreamPlayer2D")
 
 [node name="DotsContainer" type="Node2D" parent="." unique_id=2064910988]
 
@@ -59,3 +79,7 @@ size_flags_vertical = 3
 
 [node name="Picture" parent="." unique_id=1872283298 instance=ExtResource("7_272bh")]
 data = ExtResource("8_5vw27")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=276020939]
+stream = SubResource("AudioStreamRandomizer_g4v7s")
+area_mask = 536870912

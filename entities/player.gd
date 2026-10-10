@@ -11,6 +11,7 @@ extends CharacterBody2D
 
 @export var trail_container_path: NodePath
 @export var dots_container_path: NodePath
+@export var bloop_sound_path: NodePath
 
 @export var hop_distance: float = 80.0
 @export var hop_height: float = 30.0
@@ -19,6 +20,8 @@ extends CharacterBody2D
 @onready var trail_container: Node2D = get_node(trail_container_path)
 @onready var dots_container: Node2D = get_node(dots_container_path)
 @onready var magnet_collision: CollisionShape2D = $MagneticRadius/CollisionShape2D
+
+@onready var bloop_sound_player: AudioStreamPlayer2D = get_node(bloop_sound_path)
 
 var trail_dots: Array[Node2D] = []
 var trail_dot_scene: PackedScene = preload('res://entities/trail_dot.tscn')
@@ -64,6 +67,8 @@ func add_trail_dot(dot_color: Color = Color.WHITE) -> void:
 	new_dot.set_color(dot_color)
 	
 	trail_dots.append(new_dot)
+	
+	bloop_sound_player.play()
 
 func remove_trail_dot() -> void:
 	if trail_dots.size() > 0:
@@ -94,7 +99,7 @@ func _deposit_loop(container: Node2D) -> void:
 			if container == null:
 				break  # picture complete
 		var dot = trail_dots.pop_back()
-		dot.fly_to_container(container)
+		dot.fly_to_container(container, bloop_sound_player)
 		await get_tree().create_timer(0.05).timeout
 	is_depositing = false
 	
