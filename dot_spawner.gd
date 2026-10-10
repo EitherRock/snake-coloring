@@ -22,7 +22,7 @@ func spawn_dots() -> void:
 	var dots_container = get_node(dots_container_path)
 	
 	var spawned = 0
-	var max_attempts = spawn_count * 10  # safety net to avoid infinite loop
+	var max_attempts = spawn_count * 10  # prevents infinite loop
 	var attempts = 0
 	
 	while spawned < spawn_count and attempts < max_attempts:
