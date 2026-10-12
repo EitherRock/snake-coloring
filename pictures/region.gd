@@ -16,6 +16,8 @@ var fill_origin_px: Vector2 = Vector2.ZERO
 var picture_manager: Node2D = null
 var is_complete: bool = false
 
+var pending_dots: int = 0  # dots currently flying toward this region
+
 func _ready() -> void:
 	$FillEffect.material = fill_material
 
@@ -40,6 +42,8 @@ func setup(data: RegionData, picture_size: Vector2) -> void:
 	fill_origin_px = data.fill_origin * picture_size
 
 func deposit_dot(dot_color: Color) -> void:
+	pending_dots = max(pending_dots - 1, 0)
+	
 	if band_count >= MAX_BANDS or is_complete:
 		return
 
@@ -57,6 +61,15 @@ func deposit_dot(dot_color: Color) -> void:
 
 func get_deposit_position() -> Vector2:
 	return to_global(fill_origin_px)
+	
+
+func remaining_capacity() -> int:
+	return max_dots - band_count - pending_dots
+
+
+func reserve_slot() -> void:
+	pending_dots += 1
+
 
 func glow_pulse() -> void:
 	var tween = create_tween()

@@ -41,6 +41,17 @@ func select_region(region: Node2D) -> void:
 
 func get_current_region() -> Node2D:
 	return selected_region
+	
+
+# Returns the preferred region if it has room, otherwise the first region
+# (in fill order) that does. Returns null if the whole picture is spoken for.
+func get_region_with_capacity(preferred: Node2D = null) -> Node2D:
+	if preferred and preferred.remaining_capacity() > 0:
+		return preferred
+	for r in regions:
+		if r.remaining_capacity() > 0:
+			return r
+	return null
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):

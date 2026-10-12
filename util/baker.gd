@@ -1,11 +1,11 @@
 @tool
 extends EditorScript
 
-const FOLDER := "res://pictures/smiley/"
+const FOLDER := "res://pictures/house/"
 
 func _run() -> void:
 	var data := PictureData.new()
-	data.title = "smiley"
+	data.title = "house"
 	data.line_art = load(FOLDER + "lines.png")
 	data.size = data.line_art.get_size()
 

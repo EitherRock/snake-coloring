@@ -93,14 +93,22 @@ func deposit_trail_to(container: Node2D) -> void:
 	_deposit_loop(container)
 	
 func _deposit_loop(container: Node2D) -> void:
+	var manager = container.get("picture_manager")  # null for non-picture containers
+
 	while trail_dots.size() > 0:
-		if container.is_complete and container.picture_manager:
-			container = container.picture_manager.get_current_region()
-			if container == null:
-				break  # picture complete
+		var target: Node2D = container
+		if manager:
+			target = manager.get_region_with_capacity(container)
+		if target == null:
+			break  # picture is full, keep the remaining dots on the trail
+
+		if target.has_method("reserve_slot"):
+			target.reserve_slot()
+
 		var dot = trail_dots.pop_back()
-		dot.fly_to_container(container, bloop_sound_player)
+		dot.fly_to_container(target, bloop_sound_player)
 		await get_tree().create_timer(0.05).timeout
+
 	is_depositing = false
 	
 

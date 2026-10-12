@@ -2,13 +2,14 @@
 
 [ext_resource type="Script" uid="uid://ceg2n0y8jhp86" path="res://main.gd" id="1_h2yge"]
 [ext_resource type="PackedScene" uid="uid://cuhq2xu1euspm" path="res://entities/player.tscn" id="1_ig7tw"]
-[ext_resource type="Shader" uid="uid://d1ivv74khsl8k" path="res://grid.gdshader" id="2_272bh"]
+[ext_resource type="Shader" uid="uid://d1ivv74khsl8k" path="res://shaders/grid.gdshader" id="2_272bh"]
 [ext_resource type="PackedScene" uid="uid://dlrmy72n62gmt" path="res://entities/dot.tscn" id="3_h2yge"]
-[ext_resource type="Script" uid="uid://b86eld87nyhv1" path="res://dot_spawner.gd" id="5_lquwl"]
+[ext_resource type="Script" uid="uid://b86eld87nyhv1" path="res://util/dot_spawner.gd" id="5_lquwl"]
 [ext_resource type="PackedScene" uid="uid://b6pg4fj6w14m8" path="res://ui/ui.tscn" id="6_7mycd"]
-[ext_resource type="PackedScene" uid="uid://8uslfn03rggr" path="res://picture.tscn" id="7_272bh"]
+[ext_resource type="PackedScene" uid="uid://8uslfn03rggr" path="res://pictures/picture.tscn" id="7_272bh"]
 [ext_resource type="Resource" uid="uid://dd34rrm00e2yg" path="res://pictures/smiley/picture_data.tres" id="8_5vw27"]
 [ext_resource type="AudioStream" uid="uid://cvcnajpp4sq4u" path="res://audio/bl.bloop 01.wav" id="9_2cqfq"]
+[ext_resource type="Resource" uid="uid://cfpdaeoeewiti" path="res://pictures/house/picture_data.tres" id="9_yaehf"]
 [ext_resource type="AudioStream" uid="uid://opvrw1vfu5ld" path="res://audio/bl.bloop 02.wav" id="10_yaehf"]
 [ext_resource type="AudioStream" uid="uid://fsi7svlkqoj0" path="res://audio/bl.bloop 03.wav" id="11_074og"]
 [ext_resource type="AudioStream" uid="uid://dysd2qca4ean2" path="res://audio/bl.bloop 04.wav" id="12_cegan"]
@@ -64,9 +65,11 @@ z_index = 4
 [node name="DotSpawner" type="Node2D" parent="." unique_id=1403127603]
 script = ExtResource("5_lquwl")
 dot_scene = ExtResource("3_h2yge")
+spawn_count = 200
+exclusion_radius = 200.0
 player_path = NodePath("../Player")
 container_path = NodePath("../TrailContainer")
-dots_container_path = NodePath("../DotsContainer")
+dots_container_path = NodePath("../Picture")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1309987049]
 visible = false
@@ -79,6 +82,10 @@ size_flags_vertical = 3
 
 [node name="Picture" parent="." unique_id=1872283298 instance=ExtResource("7_272bh")]
 data = ExtResource("8_5vw27")
+
+[node name="Picture2" parent="." unique_id=824465438 instance=ExtResource("7_272bh")]
+position = Vector2(1689, -27)
+data = ExtResource("9_yaehf")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=276020939]
 stream = SubResource("AudioStreamRandomizer_g4v7s")
