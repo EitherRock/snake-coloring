@@ -11,6 +11,7 @@ extends CharacterBody2D
 
 @export var trail_container_path: NodePath
 @export var dots_container_path: NodePath
+@export var bloop_sound_path: NodePath
 
 @export var hop_distance: float = 80.0
 @export var hop_height: float = 30.0
@@ -20,8 +21,10 @@ extends CharacterBody2D
 @onready var dots_container: Node2D = get_node(dots_container_path)
 @onready var magnet_collision: CollisionShape2D = $MagneticRadius/CollisionShape2D
 
+@onready var bloop_sound_player: AudioStreamPlayer2D = get_node(bloop_sound_path)
+
 var trail_dots: Array[Node2D] = []
-var trail_dot_scene: PackedScene = preload('res://trail_dot.tscn')
+var trail_dot_scene: PackedScene = preload('res://entities/trail_dot.tscn')
 var dot_scene: PackedScene = preload('res://entities/dot.tscn')
 var is_depositing: bool = false
 
@@ -64,6 +67,8 @@ func add_trail_dot(dot_color: Color = Color.WHITE) -> void:
 	new_dot.set_color(dot_color)
 	
 	trail_dots.append(new_dot)
+	
+	bloop_sound_player.play()
 
 func remove_trail_dot() -> void:
 	if trail_dots.size() > 0:
@@ -88,10 +93,22 @@ func deposit_trail_to(container: Node2D) -> void:
 	_deposit_loop(container)
 	
 func _deposit_loop(container: Node2D) -> void:
+	var manager = container.get("picture_manager")  # null for non-picture containers
+
 	while trail_dots.size() > 0:
-		var dot = trail_dots.pop_back()  # take from the back of the trail
-		dot.fly_to_container(container)
-		await get_tree().create_timer(0.05).timeout  # small delay between each dot leaving
+		var target: Node2D = container
+		if manager:
+			target = manager.get_region_with_capacity(manager.selected_region)
+		if target == null:
+			break  # picture is full, keep the remaining dots on the trail
+
+		if target.has_method("reserve_slot"):
+			target.reserve_slot()
+
+		var dot = trail_dots.pop_back()
+		dot.fly_to_container(target, bloop_sound_player)
+		await get_tree().create_timer(0.05).timeout
+
 	is_depositing = false
 	
 
