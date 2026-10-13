@@ -16,6 +16,8 @@ var fill_origin_px: Vector2 = Vector2.ZERO
 var picture_manager: Node2D = null
 var is_complete: bool = false
 
+var mask_image: Image
+
 var pending_dots: int = 0  # dots currently flying toward this region
 
 func _ready() -> void:
@@ -30,6 +32,8 @@ func _ready() -> void:
 
 # Called by PictureManager right after the region is added to the tree
 func setup(data: RegionData, picture_size: Vector2) -> void:
+	mask_image = data.mask.get_image()
+	
 	max_dots = min(data.max_dots, MAX_BANDS)  # can't have more dots than bands
 	band_width = 1.0 / float(max_dots)
 
@@ -62,6 +66,15 @@ func deposit_dot(dot_color: Color) -> void:
 func get_deposit_position() -> Vector2:
 	return to_global(fill_origin_px)
 	
+
+# point is in picture pixel coordinates (the Picture node's local space)
+func contains_point(point: Vector2) -> bool:
+	var x := int(point.x)
+	var y := int(point.y)
+	if x < 0 or y < 0 or x >= mask_image.get_width() or y >= mask_image.get_height():
+		return false
+	return mask_image.get_pixel(x, y).a > 0.5
+
 
 func remaining_capacity() -> int:
 	return max_dots - band_count - pending_dots

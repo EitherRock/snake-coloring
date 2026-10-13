@@ -81,10 +81,11 @@ size_flags_vertical = 3
 [node name="Pictures" type="Node2D" parent="." unique_id=858915315]
 
 [node name="Picture" parent="." unique_id=1872283298 instance=ExtResource("7_272bh")]
+position = Vector2(-191, -842)
 data = ExtResource("8_5vw27")
 
 [node name="Picture2" parent="." unique_id=824465438 instance=ExtResource("7_272bh")]
-position = Vector2(1689, -27)
+position = Vector2(-816, -199)
 data = ExtResource("9_yaehf")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=276020939]

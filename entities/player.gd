@@ -98,7 +98,7 @@ func _deposit_loop(container: Node2D) -> void:
 	while trail_dots.size() > 0:
 		var target: Node2D = container
 		if manager:
-			target = manager.get_region_with_capacity(container)
+			target = manager.get_region_with_capacity(manager.selected_region)
 		if target == null:
 			break  # picture is full, keep the remaining dots on the trail
 

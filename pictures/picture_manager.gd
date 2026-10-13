@@ -38,6 +38,11 @@ func build_picture() -> void:
 func select_region(region: Node2D) -> void:
 	selected_region = region
 	region.glow_pulse()
+	
+	# If the player is already standing in the magnet area, start depositing now
+	for body in magnet_area.get_overlapping_bodies():
+		if body.is_in_group("player"):
+			body.deposit_trail_to(region)
 
 func get_current_region() -> Node2D:
 	return selected_region
@@ -76,3 +81,14 @@ func setup_magnet_area() -> void:
 	var circle := CircleShape2D.new()
 	circle.radius = (max(data.size.x, data.size.y) / 2.0) * magnet_margin
 	shape_node.shape = circle
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		var point := get_local_mouse_position()  # accounts for position, scale and camera zoom
+		for r in regions:
+			if r.contains_point(point):
+				if not r.is_complete:
+					select_region(r)
+				return
+				
