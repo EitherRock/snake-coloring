@@ -5,7 +5,7 @@
 [ext_resource type="Shader" uid="uid://d1ivv74khsl8k" path="res://shaders/grid.gdshader" id="2_272bh"]
 [ext_resource type="PackedScene" uid="uid://dlrmy72n62gmt" path="res://entities/dot.tscn" id="3_h2yge"]
 [ext_resource type="Script" uid="uid://b86eld87nyhv1" path="res://util/dot_spawner.gd" id="5_lquwl"]
-[ext_resource type="PackedScene" uid="uid://b6pg4fj6w14m8" path="res://ui/ui.tscn" id="6_7mycd"]
+[ext_resource type="PackedScene" uid="uid://0l5ldynft27a" path="res://ui/ui.tscn" id="6_7mycd"]
 [ext_resource type="PackedScene" uid="uid://8uslfn03rggr" path="res://pictures/picture.tscn" id="7_272bh"]
 [ext_resource type="Resource" uid="uid://dd34rrm00e2yg" path="res://pictures/gallery/smiley/picture_data.tres" id="8_5vw27"]
 [ext_resource type="AudioStream" uid="uid://cvcnajpp4sq4u" path="res://audio/bl.bloop 01.wav" id="9_2cqfq"]
@@ -42,6 +42,7 @@ stream_7/stream = ExtResource("16_d13ii")
 
 [node name="Main" type="Node2D" unique_id=303001337]
 script = ExtResource("1_h2yge")
+picture_scene = ExtResource("7_272bh")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1922699241]
 material = SubResource("ShaderMaterial_g4v7s")
