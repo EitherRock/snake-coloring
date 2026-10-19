@@ -36,6 +36,10 @@ func fly_to_container(container: Node2D, audio_player: AudioStreamPlayer2D) -> v
 	audio = audio_player
 
 func _fly_toward_container(delta: float, audio_player) -> void:
+	if not is_instance_valid(container_target):
+		queue_free()  # target vanished with the old picture
+		return
+	
 	var dest: Vector2 = container_target.global_position
 	if container_target.has_method("get_deposit_position"):
 		dest = container_target.get_deposit_position()

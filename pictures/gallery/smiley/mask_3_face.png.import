@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bjscdejktm8rm"
-path="res://.godot/imported/mask_3_door.png-63c265b1b4910e5554a3637b313ac65d.ctex"
+uid="uid://bwyepq5vyw6xh"
+path="res://.godot/imported/mask_3_face.png-db1674def5db6f8a42085f6ff5ceadef.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://pictures/house/mask_3_door.png"
-dest_files=["res://.godot/imported/mask_3_door.png-63c265b1b4910e5554a3637b313ac65d.ctex"]
+source_file="res://pictures/gallery/smiley/mask_3_face.png"
+dest_files=["res://.godot/imported/mask_3_face.png-db1674def5db6f8a42085f6ff5ceadef.ctex"]
 
 [params]
 

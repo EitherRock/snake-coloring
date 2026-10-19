@@ -10,8 +10,11 @@ extends Node2D
 var regions: Array[Node2D] = []
 var selected_region: Node2D = null
 
+var lines_sprite: Sprite2D
+
 func _ready() -> void:
-	build_picture()
+	if data:
+		build_picture()
 	magnet_area.body_entered.connect(_on_body_entered)
 
 func build_picture() -> void:
@@ -27,10 +30,10 @@ func build_picture() -> void:
 		regions.append(region)
 
 	# Line art last so it draws on top of the fills
-	var lines := Sprite2D.new()
-	lines.texture = data.line_art
-	lines.centered = false
-	add_child(lines)
+	lines_sprite = Sprite2D.new()
+	lines_sprite.texture = data.line_art
+	lines_sprite.centered = false
+	add_child(lines_sprite)
 
 	if regions.size() > 0:
 		selected_region = regions[0]
@@ -64,7 +67,7 @@ func _on_body_entered(body: Node2D) -> void:
 		if region and not region.is_complete:
 			body.deposit_trail_to(region)
 
-func on_region_filled(region: Node2D) -> void:
+func on_region_filled(_region: Node2D) -> void:
 	for r in regions:
 		if not r.is_complete:
 			selected_region = r
@@ -91,4 +94,26 @@ func _unhandled_input(event: InputEvent) -> void:
 				if not r.is_complete:
 					select_region(r)
 				return
-				
+
+func load_picture(new_data: PictureData) -> void:
+	if new_data == data and not regions.is_empty():
+		return  # already showing this picture
+
+	_clear_picture()
+	data = new_data
+	build_picture()
+
+func _clear_picture() -> void:
+	# Tell the player to stop streaming dots into regions that are about to vanish
+	for body in magnet_area.get_overlapping_bodies():
+		if body.is_in_group("player") and body.has_method("cancel_deposit"):
+			body.cancel_deposit()
+
+	for r in regions:
+		r.queue_free()
+	regions.clear()
+	selected_region = null
+
+	if lines_sprite:
+		lines_sprite.queue_free()
+		lines_sprite = null

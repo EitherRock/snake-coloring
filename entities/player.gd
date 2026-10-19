@@ -27,7 +27,7 @@ var trail_dots: Array[Node2D] = []
 var trail_dot_scene: PackedScene = preload('res://entities/trail_dot.tscn')
 var dot_scene: PackedScene = preload('res://entities/dot.tscn')
 var is_depositing: bool = false
-
+var deposit_cancelled: bool = false
 
 func set_magnet_range(radius: float) -> void:
 	magnet_collision.shape.radius += radius
@@ -96,6 +96,8 @@ func _deposit_loop(container: Node2D) -> void:
 	var manager = container.get("picture_manager")  # null for non-picture containers
 
 	while trail_dots.size() > 0:
+		if deposit_cancelled:
+			break
 		var target: Node2D = container
 		if manager:
 			target = manager.get_region_with_capacity(manager.selected_region)
@@ -108,7 +110,8 @@ func _deposit_loop(container: Node2D) -> void:
 		var dot = trail_dots.pop_back()
 		dot.fly_to_container(target, bloop_sound_player)
 		await get_tree().create_timer(0.05).timeout
-
+	
+	deposit_cancelled = false
 	is_depositing = false
 	
 
@@ -116,6 +119,8 @@ func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		pop_last_dot()
 
+func cancel_deposit() -> void:
+	deposit_cancelled = true
 
 func pop_last_dot() -> void:
 	if trail_dots.is_empty() or is_depositing:

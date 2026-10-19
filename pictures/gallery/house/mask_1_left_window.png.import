@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://gpxx8ebgpjkh"
-path="res://.godot/imported/lines.png-0e77b98f24e43f54695ea157d79d2791.ctex"
+uid="uid://cu4yoaey8f0ym"
+path="res://.godot/imported/mask_1_left_window.png-4fa19b910228e92f0a97d7c81978c5af.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://pictures/smiley/lines.png"
-dest_files=["res://.godot/imported/lines.png-0e77b98f24e43f54695ea157d79d2791.ctex"]
+source_file="res://pictures/gallery/house/mask_1_left_window.png"
+dest_files=["res://.godot/imported/mask_1_left_window.png-4fa19b910228e92f0a97d7c81978c5af.ctex"]
 
 [params]
 

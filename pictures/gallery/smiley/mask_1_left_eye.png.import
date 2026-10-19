@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cjukucs43bgm"
-path="res://.godot/imported/mask_2_right_eye.png-09309a047e4bfecb4b13e077a7b9a512.ctex"
+uid="uid://bciyvhouk6jqi"
+path="res://.godot/imported/mask_1_left_eye.png-8f455b955127ff20b49e1b8dd24101db.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://pictures/smiley/mask_2_right_eye.png"
-dest_files=["res://.godot/imported/mask_2_right_eye.png-09309a047e4bfecb4b13e077a7b9a512.ctex"]
+source_file="res://pictures/gallery/smiley/mask_1_left_eye.png"
+dest_files=["res://.godot/imported/mask_1_left_eye.png-8f455b955127ff20b49e1b8dd24101db.ctex"]
 
 [params]
 
