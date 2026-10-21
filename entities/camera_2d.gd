@@ -20,3 +20,10 @@ func _input(event: InputEvent) -> void:
 func _change_zoom(amount: float) -> void:
 	var new_zoom := clampf(zoom.x + amount, min_zoom, max_zoom)
 	zoom = Vector2(new_zoom, new_zoom)
+
+
+func zoom_in() -> void:
+	_change_zoom(zoom_step)
+
+func zoom_out() -> void:
+	_change_zoom(-zoom_step)

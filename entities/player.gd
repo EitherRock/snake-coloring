@@ -8,6 +8,7 @@ extends CharacterBody2D
 @export var acceleration: float = 1500.0
 @export var friction: float = 1500.0
 @export var stop_distance: float = 10.0  # prevents jittering when close to cursor
+@export var joystick: VirtualJoystick_
 
 @export_group("Trail")
 @export var first_dot_spacing: float = 40.0
@@ -60,15 +61,16 @@ func _update_movement(delta: float) -> void:
 	var target_velocity := Vector2.ZERO
 	var rate := friction
 
-	if Input.is_action_pressed('right_click'):
+	if joystick and joystick.output != Vector2.ZERO:
+		target_velocity = joystick.output * move_speed
+		rate = acceleration
+	elif Input.is_action_pressed('right_click'):
 		var direction := get_global_mouse_position() - global_position
-		# only move if we're not already at the target
 		if direction.length() > stop_distance:
 			target_velocity = direction.normalized() * move_speed
 			rate = acceleration
 
 	velocity = velocity.move_toward(target_velocity, rate * delta)
-
 
 # ---------------------------------------------------------------------------
 # Magnet
@@ -183,5 +185,7 @@ func _on_magnetic_radius_area_entered(area: Area2D) -> void:
 
 
 func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
+	if Platform.is_touch:
+		return  # touch uses the pop button instead
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		pop_last_dot()

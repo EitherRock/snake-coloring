@@ -5,9 +5,10 @@
 [ext_resource type="Shader" uid="uid://d1ivv74khsl8k" path="res://shaders/grid.gdshader" id="2_272bh"]
 [ext_resource type="PackedScene" uid="uid://dlrmy72n62gmt" path="res://entities/dot.tscn" id="3_h2yge"]
 [ext_resource type="Script" uid="uid://b86eld87nyhv1" path="res://util/dot_spawner.gd" id="5_lquwl"]
-[ext_resource type="PackedScene" uid="uid://0l5ldynft27a" path="res://ui/ui.tscn" id="6_7mycd"]
+[ext_resource type="Script" uid="uid://cxuvv180us86w" path="res://joystick.gd" id="7_074og"]
 [ext_resource type="PackedScene" uid="uid://8uslfn03rggr" path="res://pictures/picture.tscn" id="7_272bh"]
 [ext_resource type="Resource" uid="uid://dd34rrm00e2yg" path="res://pictures/gallery/smiley/picture_data.tres" id="8_5vw27"]
+[ext_resource type="Script" uid="uid://b556gy22jrfqd" path="res://touch_controls.gd" id="8_cegan"]
 [ext_resource type="AudioStream" uid="uid://cvcnajpp4sq4u" path="res://audio/bl.bloop 01.wav" id="9_2cqfq"]
 [ext_resource type="Resource" uid="uid://cfpdaeoeewiti" path="res://pictures/gallery/house/picture_data.tres" id="9_yaehf"]
 [ext_resource type="AudioStream" uid="uid://opvrw1vfu5ld" path="res://audio/bl.bloop 02.wav" id="10_yaehf"]
@@ -52,9 +53,10 @@ offset_right = 12887.0
 offset_bottom = 11341.0
 mouse_filter = 2
 
-[node name="Player" parent="." unique_id=851494805 instance=ExtResource("1_ig7tw")]
+[node name="Player" parent="." unique_id=851494805 node_paths=PackedStringArray("joystick") instance=ExtResource("1_ig7tw")]
 z_index = 5
 position = Vector2(1485, 320)
+joystick = NodePath("../CanvasLayer/Joystick")
 trail_container_path = NodePath("../TrailContainer")
 dots_container_path = NodePath("../DotsContainer")
 bloop_sound_path = NodePath("../AudioStreamPlayer2D")
@@ -74,11 +76,51 @@ container_path = NodePath("../TrailContainer")
 dots_container_path = NodePath("../Picture")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1309987049]
-visible = false
 
-[node name="UI" parent="CanvasLayer" unique_id=42824729 instance=ExtResource("6_7mycd")]
-size_flags_horizontal = 3
-size_flags_vertical = 3
+[node name="Joystick" type="Control" parent="CanvasLayer" unique_id=11435867]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("7_074og")
+
+[node name="TouchControls" type="Control" parent="CanvasLayer" unique_id=1673309816 node_paths=PackedStringArray("player")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("8_cegan")
+player = NodePath("../../Player")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/TouchControls" unique_id=379394411]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="PopButton" type="Button" parent="CanvasLayer/TouchControls/HBoxContainer" unique_id=2002775093]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+text = "POP"
+
+[node name="ZoomOutButton" type="Button" parent="CanvasLayer/TouchControls/HBoxContainer" unique_id=947344915]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+text = "-"
+
+[node name="ZoomInButton" type="Button" parent="CanvasLayer/TouchControls/HBoxContainer" unique_id=804694058]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+text = "+"
 
 [node name="Pictures" type="Node2D" parent="." unique_id=858915315]
 
@@ -95,3 +137,4 @@ stream = SubResource("AudioStreamRandomizer_g4v7s")
 area_mask = 536870912
 
 [node name="UI" parent="." unique_id=1430790159 instance=ExtResource("18_074og")]
+visible = false
