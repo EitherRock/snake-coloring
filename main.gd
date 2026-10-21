@@ -22,7 +22,7 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	hud.update_label_text("%d / 0" % player.trail_dots.size())
+	pass
 
 
 # ---------------------------------------------------------------------------
