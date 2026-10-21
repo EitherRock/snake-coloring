@@ -1,24 +1,41 @@
+class_name PictureManager
 extends Node2D
-# PictureManager.gd
 
 @export var data: PictureData
 @export var region_scene: PackedScene
-@export var magnet_margin: float = 1.0  # 1.0 = just covers the picture, higher = extends past the edges
-
-@onready var magnet_area: Area2D = $MagnetArea
+@export var magnet_margin: float = 1.0  # 1.0 = covers the picture, higher = extends past the edges
 
 var regions: Array[Node2D] = []
 var selected_region: Node2D = null
+var lines_sprite: Sprite2D = null
 
-var lines_sprite: Sprite2D
+@onready var magnet_area: Area2D = $MagnetArea
+
 
 func _ready() -> void:
+	magnet_area.body_entered.connect(_on_body_entered)
 	if data:
 		build_picture()
-	magnet_area.body_entered.connect(_on_body_entered)
 
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not (event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT):
+		return
+
+	var point := get_local_mouse_position()  # accounts for position, scale and camera zoom
+	for r in regions:
+		if r.contains_point(point):
+			if not r.is_complete:
+				select_region(r)
+			return
+
+
+# ---------------------------------------------------------------------------
+# Building and clearing
+# ---------------------------------------------------------------------------
 func build_picture() -> void:
-	setup_magnet_area()
+	_setup_magnet_area()
+
 	var sorted := data.regions.duplicate()
 	sorted.sort_custom(func(a, b): return a.fill_order < b.fill_order)
 
@@ -35,21 +52,37 @@ func build_picture() -> void:
 	lines_sprite.centered = false
 	add_child(lines_sprite)
 
-	if regions.size() > 0:
+	if not regions.is_empty():
 		selected_region = regions[0]
 
+
+func _setup_magnet_area() -> void:
+	var shape_node: CollisionShape2D = magnet_area.get_node("CollisionShape2D")
+
+	# Center it on the picture (the picture's origin is its top-left corner)
+	magnet_area.position = data.size / 2.0
+
+	# New shape per picture so pictures don't share one resource
+	var circle := CircleShape2D.new()
+	circle.radius = (maxf(data.size.x, data.size.y) / 2.0) * magnet_margin
+	shape_node.shape = circle
+
+
+# ---------------------------------------------------------------------------
+# Region selection and capacity
+# ---------------------------------------------------------------------------
 func select_region(region: Node2D) -> void:
 	selected_region = region
 	region.glow_pulse()
-	
+
 	# If the player is already standing in the magnet area, start depositing now
-	for body in magnet_area.get_overlapping_bodies():
-		if body.is_in_group("player"):
-			body.deposit_trail_to(region)
+	for body in _get_players_in_range():
+		body.deposit_trail_to(region)
+
 
 func get_current_region() -> Node2D:
 	return selected_region
-	
+
 
 # Returns the preferred region if it has room, otherwise the first region
 # (in fill order) that does. Returns null if the whole picture is spoken for.
@@ -61,11 +94,6 @@ func get_region_with_capacity(preferred: Node2D = null) -> Node2D:
 			return r
 	return null
 
-func _on_body_entered(body: Node2D) -> void:
-	if body.is_in_group("player"):
-		var region = get_current_region()
-		if region and not region.is_complete:
-			body.deposit_trail_to(region)
 
 func on_region_filled(_region: Node2D) -> void:
 	for r in regions:
@@ -74,46 +102,22 @@ func on_region_filled(_region: Node2D) -> void:
 			return
 	print("Picture complete!")
 
-func setup_magnet_area() -> void:
-	var shape_node: CollisionShape2D = magnet_area.get_node("CollisionShape2D")
 
-	# Center it on the picture. the picture's origin is its top-left corner
-	magnet_area.position = data.size / 2.0
-
-	# Duplicate so pictures don't share one shape resource
-	var circle := CircleShape2D.new()
-	circle.radius = (max(data.size.x, data.size.y) / 2.0) * magnet_margin
-	shape_node.shape = circle
-
-
-func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		var point := get_local_mouse_position()  # accounts for position, scale and camera zoom
-		for r in regions:
-			if r.contains_point(point):
-				if not r.is_complete:
-					select_region(r)
-				return
-
-func load_picture(new_data: PictureData) -> void:
-	if new_data == data and not regions.is_empty():
-		return  # already showing this picture
-
-	_clear_picture()
-	data = new_data
-	build_picture()
-
-func _clear_picture() -> void:
-	# Tell the player to stop streaming dots into regions that are about to vanish
+# ---------------------------------------------------------------------------
+# Player detection
+# ---------------------------------------------------------------------------
+func _get_players_in_range() -> Array[Node2D]:
+	var players: Array[Node2D] = []
 	for body in magnet_area.get_overlapping_bodies():
-		if body.is_in_group("player") and body.has_method("cancel_deposit"):
-			body.cancel_deposit()
+		if body.is_in_group("player"):
+			players.append(body)
+	return players
 
-	for r in regions:
-		r.queue_free()
-	regions.clear()
-	selected_region = null
 
-	if lines_sprite:
-		lines_sprite.queue_free()
-		lines_sprite = null
+func _on_body_entered(body: Node2D) -> void:
+	if not body.is_in_group("player"):
+		return
+
+	var region := get_current_region()
+	if region and not region.is_complete:
+		body.deposit_trail_to(region)
