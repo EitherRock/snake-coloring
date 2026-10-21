@@ -20,12 +20,11 @@ func _ready() -> void:
 
 
 func _input(event: InputEvent) -> void:
-	var local_touch = get_global_transform_with_canvas().affine_inverse() * event.position
 	
 	if event is InputEventScreenTouch:
 		print("touch at ", event.position, " pressed: ", event.pressed)
-		#if event.pressed and _touch_index == -1 and get_rect().has_point(local_touch):
-		if event.pressed and _touch_index == -1:
+		if event.pressed and _touch_index == -1 and _is_inside(event.position):
+		#if event.pressed and _touch_index == -1:
 			_touch_index = event.index
 			_origin = event.position
 			_knob = _origin
@@ -43,6 +42,9 @@ func _input(event: InputEvent) -> void:
 			output = Vector2.ZERO
 		queue_redraw()
 
+
+func _is_inside(screen_pos: Vector2) -> bool:
+	return screen_pos.x < get_viewport_rect().size.x * 0.33
 
 func _release() -> void:
 	_touch_index = -1

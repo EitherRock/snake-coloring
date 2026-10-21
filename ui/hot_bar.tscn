@@ -20,51 +20,57 @@ mouse_filter = 2
 script = ExtResource("1_2odyk")
 pictures = Array[ExtResource("2_2rvev")]([ExtResource("3_m2je3"), ExtResource("4_knc16")])
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Root" unique_id=739595172]
+[node name="Side" type="HBoxContainer" parent="Root" unique_id=279281316]
+unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
+anchors_preset = 11
+anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -8.0
-grow_horizontal = 2
-grow_vertical = 0
+offset_left = -96.0
+grow_horizontal = 0
+grow_vertical = 2
 
-[node name="PopupPanel" type="PopupPanel" parent="Root/VBoxContainer" unique_id=1421491792]
-oversampling_override = 1.0
-position = Vector2i(0, 490)
-size = Vector2i(1150, 108)
-visible = true
+[node name="PopupPanel" type="PanelContainer" parent="Root/Side" unique_id=1846314755]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+size_flags_horizontal = 0
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Root/VBoxContainer/PopupPanel" unique_id=686548498]
+[node name="ScrollContainer" type="ScrollContainer" parent="Root/Side/PopupPanel" unique_id=686548498]
 custom_minimum_size = Vector2(0, 50)
-offset_left = 4.0
-offset_top = 4.0
-offset_right = 1146.0
-offset_bottom = 104.0
-vertical_scroll_mode = 0
+layout_mode = 2
+horizontal_scroll_mode = 0
 
-[node name="Items" type="HBoxContainer" parent="Root/VBoxContainer/PopupPanel/ScrollContainer" unique_id=1565180266]
+[node name="Items" type="VBoxContainer" parent="Root/Side/PopupPanel/ScrollContainer" unique_id=797431911]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 8
+alignment = 1
 
-[node name="HotBar" type="PanelContainer" parent="Root/VBoxContainer" unique_id=1907222888]
+[node name="HotBar" type="PanelContainer" parent="Root/Side" unique_id=1907222888]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_2rvev")
 
-[node name="Buttons" type="HBoxContainer" parent="Root/VBoxContainer/HotBar" unique_id=527109913]
+[node name="Buttons" type="VBoxContainer" parent="Root/Side/HotBar" unique_id=66015834]
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 16
+alignment = 1
 
-[node name="Control" type="Control" parent="Root/VBoxContainer/HotBar/Buttons" unique_id=1075329502]
+[node name="GalleryButton" type="Button" parent="Root/Side/HotBar/Buttons" unique_id=202367246]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 140)
 layout_mode = 2
-
-[node name="GalleryButton" type="Button" parent="Root/VBoxContainer/HotBar/Buttons" unique_id=202367246]
-layout_mode = 2
+theme_override_font_sizes/font_size = 28
 text = "Gallery
 "
 
-[node name="PatternButton" type="Button" parent="Root/VBoxContainer/HotBar/Buttons" unique_id=1993949863]
+[node name="PatternButton" type="Button" parent="Root/Side/HotBar/Buttons" unique_id=1993949863]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 140)
 layout_mode = 2
+theme_override_font_sizes/font_size = 28
 text = "Patterns"

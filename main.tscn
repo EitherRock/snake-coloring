@@ -83,6 +83,7 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("7_074og")
+radius = 150.0
 
 [node name="TouchControls" type="Control" parent="CanvasLayer" unique_id=1673309816 node_paths=PackedStringArray("player")]
 layout_mode = 3
@@ -102,24 +103,30 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -40.0
-offset_top = -40.0
+offset_left = -652.0
+offset_top = -140.0
+offset_right = -200.0
 grow_horizontal = 0
 grow_vertical = 0
+offset_transform_enabled = true
+theme_override_constants/separation = 16
 
 [node name="PopButton" type="Button" parent="CanvasLayer/TouchControls/HBoxContainer" unique_id=2002775093]
-custom_minimum_size = Vector2(96, 96)
+custom_minimum_size = Vector2(140, 140)
 layout_mode = 2
+theme_override_font_sizes/font_size = 28
 text = "POP"
 
 [node name="ZoomOutButton" type="Button" parent="CanvasLayer/TouchControls/HBoxContainer" unique_id=947344915]
-custom_minimum_size = Vector2(96, 96)
+custom_minimum_size = Vector2(140, 140)
 layout_mode = 2
+theme_override_font_sizes/font_size = 28
 text = "-"
 
 [node name="ZoomInButton" type="Button" parent="CanvasLayer/TouchControls/HBoxContainer" unique_id=804694058]
-custom_minimum_size = Vector2(96, 96)
+custom_minimum_size = Vector2(140, 140)
 layout_mode = 2
+theme_override_font_sizes/font_size = 28
 text = "+"
 
 [node name="Pictures" type="Node2D" parent="." unique_id=858915315]
@@ -137,4 +144,3 @@ stream = SubResource("AudioStreamRandomizer_g4v7s")
 area_mask = 536870912
 
 [node name="UI" parent="." unique_id=1430790159 instance=ExtResource("18_074og")]
-visible = false

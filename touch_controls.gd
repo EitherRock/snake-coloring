@@ -1,7 +1,7 @@
 extends Control
 
 @export var player: Node
-@export var camera: Camera2D
+#@export var camera: Camera2D
 
 @onready var pop_button: Button = $HBoxContainer/PopButton
 @onready var zoom_in_button: Button = $HBoxContainer/ZoomInButton

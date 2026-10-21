@@ -10,31 +10,38 @@ const PATTERNS := [
 	{"id": "spiral", "label": "Spiral"},
 	{"id": "checker", "label": "Checker"},
 ]
-const ITEM_SIZE := Vector2(100, 100)
+const ITEM_SIZE := Vector2(150, 150)
 const GHOST_SIZE := Vector2(160, 160)
 const GHOST_ALPHA := 0.7
 const CLOSE_AFTER_PICK := false  # true = popup closes after choosing a pattern
+const DRAG_START_DISTANCE := 24.0
+const DRAG_DIRECTION_BIAS := 1.5  # sideways movement must beat vertical by this factor
+const GHOST_TOUCH_OFFSET := Vector2(0, -90)  # keeps the ghost above the finger
 
 @export var pictures: Array[PictureData] = []
 
 var open_menu: String = ""
 var drag_data: PictureData = null
 var drag_ghost: TextureRect = null
+var _press_item: PictureData = null
+var _press_pos := Vector2.ZERO
 
-@onready var popup: PopupPanel = $VBoxContainer/PopupPanel
-@onready var items_box: HBoxContainer = $VBoxContainer/PopupPanel/ScrollContainer/Items
-@onready var hotbar: Control = $VBoxContainer/HotBar
-@onready var gallery_button: Button = $VBoxContainer/HotBar/Buttons/GalleryButton
-@onready var pattern_button: Button = $VBoxContainer/HotBar/Buttons/PatternButton
+@onready var popup: PanelContainer = %PopupPanel
+@onready var items_box: VBoxContainer = %Items
+@onready var hotbar: Control = %HotBar
+@onready var gallery_button: Button = %GalleryButton
+@onready var pattern_button: Button = %PatternButton
 
 
 func _ready() -> void:
 	gallery_button.pressed.connect(toggle_menu.bind("gallery"))
 	pattern_button.pressed.connect(toggle_menu.bind("pattern"))
+	_apply_safe_area()
 
 
 func _input(event: InputEvent) -> void:
 	if drag_data == null:
+		_check_drag_start(event)
 		return
 
 	if event is InputEventMouseMotion:
@@ -42,6 +49,13 @@ func _input(event: InputEvent) -> void:
 	elif event is InputEventMouseButton and not event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		_finish_drag()
 
+
+func _apply_safe_area() -> void:
+	var safe := DisplayServer.get_display_safe_area()
+	var win := Vector2(DisplayServer.window_get_size())
+	var to_ui := get_viewport().get_visible_rect().size / win  # window pixels to UI units
+	var right_inset := (win.x - safe.end.x) * to_ui.x
+	$Side.offset_right = -maxf(right_inset, 0.0)
 
 # ---------------------------------------------------------------------------
 # Popup menu
@@ -91,7 +105,7 @@ func _add_pattern_item(pat: Dictionary) -> void:
 
 func _add_picture_item(p: PictureData) -> void:
 	var b := _make_item_button(p.title, p.line_art)
-	b.button_down.connect(_start_drag.bind(p))  # starts on press, not on click
+	b.button_down.connect(_on_item_down.bind(p))  # starts on press, not on click
 	items_box.add_child(b)
 
 
@@ -106,6 +120,7 @@ func _make_item_button(label: String, icon: Texture2D) -> Button:
 	b.expand_icon = true
 	b.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	b.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
+	b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	b.custom_minimum_size = ITEM_SIZE
 	b.add_theme_stylebox_override("normal", style)
 	return b
@@ -128,11 +143,25 @@ func _start_drag(p: PictureData) -> void:
 
 	close_menu()  # clear the popup so the world is visible
 	_update_ghost()
+	
+
+func _check_drag_start(event: InputEvent) -> void:
+	if _press_item == null:
+		return
+
+	if event is InputEventMouseMotion:
+		var d := get_viewport().get_mouse_position() - _press_pos
+		if absf(d.x) > DRAG_START_DISTANCE and absf(d.x) > absf(d.y) * DRAG_DIRECTION_BIAS:
+			var p := _press_item
+			_press_item = null
+			_start_drag(p)
+	elif event is InputEventMouseButton and not event.pressed:
+		_press_item = null
 
 
 func _update_ghost() -> void:
-	drag_ghost.position = get_viewport().get_mouse_position() - drag_ghost.size / 2.0
-
+	var offset := GHOST_TOUCH_OFFSET if Platform.is_touch else Vector2.ZERO
+	drag_ghost.position = get_viewport().get_mouse_position() - drag_ghost.size / 2.0 + offset
 
 func _finish_drag() -> void:
 	var screen_pos := get_viewport().get_mouse_position()
@@ -140,9 +169,19 @@ func _finish_drag() -> void:
 	# Releasing over the hotbar cancels the drag
 	if not hotbar.get_global_rect().has_point(screen_pos):
 		# screen position -> world position (accounts for camera pan and zoom)
-		var world_pos: Vector2 = get_viewport().get_canvas_transform().affine_inverse() * screen_pos
+		#var world_pos: Vector2 = get_viewport().get_canvas_transform().affine_inverse() * screen_pos
+		var drop_pos := screen_pos + (GHOST_TOUCH_OFFSET if Platform.is_touch else Vector2.ZERO)
+		var world_pos: Vector2 = get_viewport().get_canvas_transform().affine_inverse() * drop_pos
 		picture_dropped.emit(drag_data, world_pos)
 
 	drag_ghost.queue_free()
 	drag_ghost = null
 	drag_data = null
+
+
+func _on_item_down(p: PictureData) -> void:
+	if not Platform.is_touch:
+		_start_drag(p)  # desktop: drag immediately
+		return
+	_press_item = p
+	_press_pos = get_viewport().get_mouse_position()
