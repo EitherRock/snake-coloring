@@ -19,6 +19,7 @@
 [ext_resource type="AudioStream" uid="uid://b1ig50ahp7ik5" path="res://audio/bl.bloop 07.wav" id="15_ryguw"]
 [ext_resource type="AudioStream" uid="uid://nocsp6u5jjtn" path="res://audio/bl.bloop 08.wav" id="16_d13ii"]
 [ext_resource type="PackedScene" uid="uid://cp7dafjxfvxag" path="res://ui/hot_bar.tscn" id="18_074og"]
+[ext_resource type="Script" uid="uid://ywe23y53dxcx" path="res://placement_controller.gd" id="20_82xsv"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_g4v7s"]
 shader = ExtResource("2_272bh")
@@ -129,6 +130,42 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = "+"
 
+[node name="ConfirmBar" type="HBoxContainer" parent="CanvasLayer" unique_id=671145989]
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 0
+theme_override_constants/separation = 16
+
+[node name="ConfirmButton" type="Button" parent="CanvasLayer/ConfirmBar" unique_id=536150614]
+custom_minimum_size = Vector2(140, 140)
+layout_mode = 2
+text = "Confirm"
+
+[node name="CancelButton" type="Button" parent="CanvasLayer/ConfirmBar" unique_id=10890928]
+custom_minimum_size = Vector2(140, 140)
+layout_mode = 2
+text = "Cancel"
+
+[node name="ScaleBar" type="VBoxContainer" parent="CanvasLayer" unique_id=2049159541]
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 0
+theme_override_constants/separation = 16
+
+[node name="BiggerButton" type="Button" parent="CanvasLayer/ScaleBar" unique_id=1459026715]
+custom_minimum_size = Vector2(140, 140)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "+"
+
+[node name="SmallerButton" type="Button" parent="CanvasLayer/ScaleBar" unique_id=457243721]
+custom_minimum_size = Vector2(140, 140)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "-"
+
 [node name="Pictures" type="Node2D" parent="." unique_id=858915315]
 
 [node name="Picture" parent="." unique_id=1872283298 instance=ExtResource("7_272bh")]
@@ -144,3 +181,12 @@ stream = SubResource("AudioStreamRandomizer_g4v7s")
 area_mask = 536870912
 
 [node name="UI" parent="." unique_id=1430790159 instance=ExtResource("18_074og")]
+
+[node name="PlacementController" type="Node" parent="." unique_id=1206493489 node_paths=PackedStringArray("confirm_bar", "scale_bar", "confirm_button", "cancel_button", "bigger_button", "smaller_button")]
+script = ExtResource("20_82xsv")
+confirm_bar = NodePath("../CanvasLayer/ConfirmBar")
+scale_bar = NodePath("../CanvasLayer/ScaleBar")
+confirm_button = NodePath("../CanvasLayer/ConfirmBar/ConfirmButton")
+cancel_button = NodePath("../CanvasLayer/ConfirmBar/CancelButton")
+bigger_button = NodePath("../CanvasLayer/ScaleBar/BiggerButton")
+smaller_button = NodePath("../CanvasLayer/ScaleBar/SmallerButton")

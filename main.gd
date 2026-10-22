@@ -12,6 +12,7 @@ const BACKGROUND_COLOR := Color("ffffffff")
 @onready var hud: Control = canvas.get_child(0)
 @onready var ui_bar: UIBar = $UI/Root
 @onready var pictures: Node2D = $Pictures
+@onready var placement: PlacementController = $PlacementController
 
 
 func _ready() -> void:
@@ -29,12 +30,16 @@ func _process(_delta: float) -> void:
 # Pictures
 # ---------------------------------------------------------------------------
 func _place_picture(data: PictureData, world_pos: Vector2) -> void:
-	var pic = picture_scene.instantiate()
-	pic.data = data  # set before add_child so _ready() builds with it
+	if placement.is_placing():
+		return  # one pending picture at a time
+
+	var pic: PictureManager = picture_scene.instantiate()
+	pic.data = data
+	pic.confirmed = false  # set before add_child so _ready() starts it pending
 	pic.scale = Vector2.ONE * picture_scale
-	# the picture's origin is its top-left corner, so offset to center it on the drop point
 	pic.position = world_pos - data.size * picture_scale / 2.0
 	pictures.add_child(pic)
+	placement.begin(pic)
 
 
 # ---------------------------------------------------------------------------

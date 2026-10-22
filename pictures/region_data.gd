@@ -6,3 +6,22 @@ extends Resource
 @export var max_distance: float = 500.0               # farthest pixel from the origin
 @export var max_dots: int = 50
 @export var fill_order: int = 0
+
+
+# Filled in by prepare(); not exported, so it isn't saved into the .tres
+var bounds := Rect2i()          # bounding box in picture pixels
+var cropped_image: Image        # used for click detection
+var cropped_texture: ImageTexture  # used by the shader
+
+func prepare() -> void:
+	if cropped_texture != null:
+		return  # already done (shared between copies of the picture)
+
+	var full := mask.get_image()
+	bounds = full.get_used_rect()
+	if bounds.size.x <= 0 or bounds.size.y <= 0:
+		bounds = Rect2i(0, 0, 1, 1)  # empty mask guard, avoids dividing by zero
+
+	cropped_image = full.get_region(bounds)
+	cropped_texture = ImageTexture.create_from_image(cropped_image)
+	

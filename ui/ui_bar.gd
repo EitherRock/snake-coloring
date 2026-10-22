@@ -110,7 +110,7 @@ func _add_picture_item(p: PictureData) -> void:
 
 
 # Shared look for every button in the popup
-func _make_item_button(label: String, icon: Texture2D) -> Button:
+func _make_item_button(label: String, icon: Texture2D = null) -> Button:
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color.WHITE
 

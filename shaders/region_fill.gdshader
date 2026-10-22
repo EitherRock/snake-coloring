@@ -16,6 +16,9 @@ uniform vec4 glow_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);
 
 void fragment() {
 	float mask = texture(region_mask, UV).a;
+	if (mask <= 0.0) {
+		discard;
+	}
 
 	// 0.0 at the origin, 1.0 at the farthest point of the region
 	float dist = length((UV - fill_origin) * mask_size) / max_distance;

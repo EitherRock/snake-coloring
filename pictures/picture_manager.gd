@@ -1,6 +1,9 @@
 class_name PictureManager
 extends Node2D
 
+const PENDING_ALPHA := 0.7
+const PENDING_OUTLINE := Color(0.2, 0.5, 1.0, 0.9)
+
 @export var data: PictureData
 @export var region_scene: PackedScene
 @export var magnet_margin: float = 1.0  # 1.0 = covers the picture, higher = extends past the edges
@@ -8,6 +11,7 @@ extends Node2D
 var regions: Array[Node2D] = []
 var selected_region: Node2D = null
 var lines_sprite: Sprite2D = null
+var confirmed: bool = true  # Main sets this to false before add_child for new drops
 
 @onready var magnet_area: Area2D = $MagnetArea
 
@@ -16,10 +20,14 @@ func _ready() -> void:
 	magnet_area.body_entered.connect(_on_body_entered)
 	if data:
 		build_picture()
+	_apply_placement_state()
 
 
 func _unhandled_input(event: InputEvent) -> void:
 	if Platform.joystick_active:
+		return
+	
+	if not confirmed:
 		return
 		
 	if not (event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT):
@@ -72,6 +80,28 @@ func _setup_magnet_area() -> void:
 
 
 # ---------------------------------------------------------------------------
+# Picture Placement
+# ---------------------------------------------------------------------------
+func _apply_placement_state() -> void:
+	magnet_area.monitoring = confirmed  # a pending picture can't receive dots
+	modulate.a = 1.0 if confirmed else PENDING_ALPHA
+	queue_redraw()
+
+
+func confirm() -> void:
+	confirmed = true
+	magnet_area.set_deferred("monitoring", true)
+	modulate.a = 1.0
+	queue_redraw()
+
+
+func _draw() -> void:
+	if confirmed or data == null:
+		return
+	draw_rect(Rect2(Vector2.ZERO, data.size), PENDING_OUTLINE, false, 6.0)
+
+
+# ---------------------------------------------------------------------------
 # Region selection and capacity
 # ---------------------------------------------------------------------------
 func select_region(region: Node2D) -> void:
@@ -111,6 +141,10 @@ func on_region_filled(_region: Node2D) -> void:
 # ---------------------------------------------------------------------------
 func _get_players_in_range() -> Array[Node2D]:
 	var players: Array[Node2D] = []
+	
+	if not magnet_area.monitoring:
+		return players
+	
 	for body in magnet_area.get_overlapping_bodies():
 		if body.is_in_group("player"):
 			players.append(body)

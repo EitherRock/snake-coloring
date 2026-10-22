@@ -2,6 +2,7 @@ class_name Region
 extends Node2D
 
 const MAX_BANDS := 10  # must match MAX_BANDS in region_fill.gdshader
+const DEBUG_BOUNDS := true  # set to false when done debugging stuff
 
 @export var max_dots: int = 50
 
@@ -17,6 +18,8 @@ var pending_dots: int = 0  # dots currently flying toward this region
 var fill_origin_px: Vector2 = Vector2.ZERO
 var mask_image: Image
 
+var bounds_origin := Vector2.ZERO  # top-left of the box, in picture pixels
+
 @onready var fill_effect: ColorRect = $FillEffect
 @onready var fill_material: ShaderMaterial = fill_effect.material.duplicate()
 
@@ -31,21 +34,33 @@ func _ready() -> void:
 	band_width = 1.0 / float(max_dots)
 
 
+func _draw() -> void:
+	if DEBUG_BOUNDS and mask_image:
+		draw_rect(Rect2(bounds_origin, mask_image.get_size()), Color.RED, false, 2.0)
+
 # ---------------------------------------------------------------------------
 # Setup (called by PictureManager right after the region is added to the tree)
 # ---------------------------------------------------------------------------
 func setup(data: RegionData, picture_size: Vector2) -> void:
-	mask_image = data.mask.get_image()
-	fill_origin_px = data.fill_origin * picture_size
+	data.prepare()
 
-	max_dots = mini(data.max_dots, MAX_BANDS)  # can't have more dots than bands
+	var box_size := Vector2(data.bounds.size)
+	bounds_origin = Vector2(data.bounds.position)
+	mask_image = data.cropped_image
+	fill_origin_px = data.fill_origin * picture_size  # still in full-picture pixels
+
+	max_dots = mini(data.max_dots, MAX_BANDS)
 	band_width = 1.0 / float(max_dots)
 
-	fill_effect.size = picture_size
-	fill_material.set_shader_parameter("region_mask", data.mask)
-	fill_material.set_shader_parameter("mask_size", picture_size)
-	fill_material.set_shader_parameter("fill_origin", data.fill_origin)
+	# Size and place the rect around just this region
+	fill_effect.position = bounds_origin
+	fill_effect.size = box_size
+
+	fill_material.set_shader_parameter("region_mask", data.cropped_texture)
+	fill_material.set_shader_parameter("mask_size", box_size)
+	fill_material.set_shader_parameter("fill_origin", (fill_origin_px - bounds_origin) / box_size)
 	fill_material.set_shader_parameter("max_distance", data.max_distance)
+	queue_redraw()
 
 
 # ---------------------------------------------------------------------------
@@ -87,8 +102,8 @@ func deposit_dot(dot_color: Color) -> void:
 # ---------------------------------------------------------------------------
 # point is in picture pixel coordinates (the Picture node's local space)
 func contains_point(point: Vector2) -> bool:
-	var x := int(point.x)
-	var y := int(point.y)
+	var x := floori(point.x - bounds_origin.x)
+	var y := floori(point.y - bounds_origin.y)
 	if x < 0 or y < 0 or x >= mask_image.get_width() or y >= mask_image.get_height():
 		return false
 	return mask_image.get_pixel(x, y).a > 0.5
