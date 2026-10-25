@@ -16,6 +16,8 @@ const HOTBAR_RESERVE := 160.0
 @export var bigger_button: Button
 @export var smaller_button: Button
 
+@onready var audio: AudioStreamPlayer = $"../ButtonSound"
+
 var pending: PictureManager = null
 var _dragging := false
 var _grab_offset := Vector2.ZERO
@@ -40,13 +42,15 @@ func begin(pic: PictureManager) -> void:
 
 
 func confirm() -> void:
+	audio.play()
 	if pending == null:
 		return
 	pending.confirm()
 	_end()
-
+	
 
 func cancel() -> void:
+	audio.play()
 	if pending == null:
 		return
 	pending.queue_free()
@@ -136,6 +140,7 @@ func _input(event: InputEvent) -> void:
 
 
 func _scale_by(factor: float) -> void:
+	audio.play()
 	if pending == null:
 		return
 	var new_scale := clampf(pending.scale.x * factor, MIN_SCALE, MAX_SCALE)

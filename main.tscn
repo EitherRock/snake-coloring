@@ -20,6 +20,7 @@
 [ext_resource type="AudioStream" uid="uid://nocsp6u5jjtn" path="res://audio/bl.bloop 08.wav" id="16_d13ii"]
 [ext_resource type="PackedScene" uid="uid://cp7dafjxfvxag" path="res://ui/hot_bar.tscn" id="18_074og"]
 [ext_resource type="Script" uid="uid://ywe23y53dxcx" path="res://placement_controller.gd" id="20_82xsv"]
+[ext_resource type="AudioStream" uid="uid://cqyot2ymxjpwa" path="res://audio/button-click-selection.wav" id="21_getpj"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_g4v7s"]
 shader = ExtResource("2_272bh")
@@ -180,7 +181,8 @@ data = ExtResource("9_yaehf")
 stream = SubResource("AudioStreamRandomizer_g4v7s")
 area_mask = 536870912
 
-[node name="UI" parent="." unique_id=1430790159 instance=ExtResource("18_074og")]
+[node name="UI" parent="." unique_id=1430790159 node_paths=PackedStringArray("audio") instance=ExtResource("18_074og")]
+audio = NodePath("../ButtonSound")
 
 [node name="PlacementController" type="Node" parent="." unique_id=1206493489 node_paths=PackedStringArray("confirm_bar", "scale_bar", "confirm_button", "cancel_button", "bigger_button", "smaller_button")]
 script = ExtResource("20_82xsv")
@@ -190,3 +192,6 @@ confirm_button = NodePath("../CanvasLayer/ConfirmBar/ConfirmButton")
 cancel_button = NodePath("../CanvasLayer/ConfirmBar/CancelButton")
 bigger_button = NodePath("../CanvasLayer/ScaleBar/BiggerButton")
 smaller_button = NodePath("../CanvasLayer/ScaleBar/SmallerButton")
+
+[node name="ButtonSound" type="AudioStreamPlayer" parent="." unique_id=1699338579]
+stream = ExtResource("21_getpj")

@@ -1,6 +1,8 @@
 class_name PictureManager
 extends Node2D
 
+signal region_selected(region: Node2D)
+
 const PENDING_ALPHA := 0.7
 const PENDING_OUTLINE := Color(0.2, 0.5, 1.0, 0.9)
 
@@ -36,7 +38,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	var point := get_local_mouse_position()  # accounts for position, scale and camera zoom
 	for r in regions:
 		if r.contains_point(point):
-			if not r.is_complete:
+			if r.is_complete:
+				r.glow_pulse()
+				region_selected.emit(r)  # pattern target only, deposits don't change
+			else:
 				select_region(r)
 			return
 
@@ -65,6 +70,7 @@ func build_picture() -> void:
 
 	if not regions.is_empty():
 		selected_region = regions[0]
+		region_selected.emit(selected_region)
 
 
 func _setup_magnet_area() -> void:
@@ -93,6 +99,9 @@ func confirm() -> void:
 	magnet_area.set_deferred("monitoring", true)
 	modulate.a = 1.0
 	queue_redraw()
+	
+	if selected_region:
+		region_selected.emit(selected_region)
 
 
 func _draw() -> void:
@@ -107,7 +116,8 @@ func _draw() -> void:
 func select_region(region: Node2D) -> void:
 	selected_region = region
 	region.glow_pulse()
-
+	region_selected.emit(region)
+	
 	# If the player is already standing in the magnet area, start depositing now
 	for body in _get_players_in_range():
 		body.deposit_trail_to(region)
@@ -132,6 +142,7 @@ func on_region_filled(_region: Node2D) -> void:
 	for r in regions:
 		if not r.is_complete:
 			selected_region = r
+			region_selected.emit(r)
 			return
 	print("Picture complete!")
 

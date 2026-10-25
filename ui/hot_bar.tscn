@@ -1,13 +1,17 @@
 [gd_scene format=3 uid="uid://cp7dafjxfvxag"]
 
 [ext_resource type="Script" uid="uid://bf4a4ue7un2tb" path="res://ui/ui_bar.gd" id="1_2odyk"]
+[ext_resource type="Script" uid="uid://b4belqc0ys1ks" path="res://ui/ui_main.gd" id="1_m2je3"]
 [ext_resource type="Script" uid="uid://caw4woevd35gm" path="res://pictures/picture_data.gd" id="2_2rvev"]
 [ext_resource type="Resource" uid="uid://cfpdaeoeewiti" path="res://pictures/gallery/house/picture_data.tres" id="3_m2je3"]
 [ext_resource type="Resource" uid="uid://dd34rrm00e2yg" path="res://pictures/gallery/smiley/picture_data.tres" id="4_knc16"]
+[ext_resource type="Resource" uid="uid://cr5m8stxmty0s" path="res://pictures/butterfly/picture_data.res" id="6_knc16"]
+[ext_resource type="Resource" uid="uid://b3gkbitbbjxj0" path="res://pictures/sailboat/picture_data.res" id="7_7kl72"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2rvev"]
 
 [node name="UI" type="CanvasLayer" unique_id=1430790159]
+script = ExtResource("1_m2je3")
 
 [node name="Root" type="Control" parent="." unique_id=1503145818]
 layout_mode = 3
@@ -18,7 +22,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_2odyk")
-pictures = Array[ExtResource("2_2rvev")]([ExtResource("3_m2je3"), ExtResource("4_knc16")])
+pictures = Array[ExtResource("2_2rvev")]([ExtResource("3_m2je3"), ExtResource("4_knc16"), ExtResource("6_knc16"), ExtResource("7_7kl72")])
 
 [node name="Side" type="HBoxContainer" parent="Root" unique_id=279281316]
 unique_name_in_owner = true

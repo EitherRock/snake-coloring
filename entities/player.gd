@@ -154,7 +154,8 @@ func _deposit_loop(container: Node2D) -> void:
 func pop_last_dot() -> void:
 	if trail_dots.is_empty() or is_depositing:
 		return
-
+	
+	bloop_sound_player.play()
 	var last_dot = trail_dots.pop_back()
 	var color: Color = last_dot.dot_color
 	var start: Vector2 = last_dot.global_position

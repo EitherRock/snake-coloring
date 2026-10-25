@@ -9,6 +9,8 @@ const PATTERNS := [
 	{"id": "linear", "label": "Linear"},
 	{"id": "spiral", "label": "Spiral"},
 	{"id": "checker", "label": "Checker"},
+	{"id": "clock", "label": "Clock"},
+	{"id": "diamond", "label": "Diamond"}
 ]
 const ITEM_SIZE := Vector2(150, 150)
 const GHOST_SIZE := Vector2(160, 160)
@@ -25,6 +27,7 @@ var drag_data: PictureData = null
 var drag_ghost: TextureRect = null
 var _press_item: PictureData = null
 var _press_pos := Vector2.ZERO
+var audio: AudioStreamPlayer
 
 @onready var popup: PanelContainer = %PopupPanel
 @onready var items_box: VBoxContainer = %Items
@@ -63,6 +66,7 @@ func _apply_safe_area() -> void:
 func toggle_menu(menu: String) -> void:
 	if open_menu == menu:
 		close_menu()
+		audio.play()
 		return
 
 	open_menu = menu
@@ -75,7 +79,8 @@ func toggle_menu(menu: String) -> void:
 		"pattern":
 			for pat in PATTERNS:
 				_add_pattern_item(pat)
-
+	
+	audio.play()
 	popup.show()
 
 
@@ -113,6 +118,7 @@ func _add_picture_item(p: PictureData) -> void:
 func _make_item_button(label: String, icon: Texture2D = null) -> Button:
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color.WHITE
+	
 
 	var b := Button.new()
 	b.text = label
@@ -122,6 +128,7 @@ func _make_item_button(label: String, icon: Texture2D = null) -> Button:
 	b.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
 	b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	b.custom_minimum_size = ITEM_SIZE
+	b.add_theme_color_override('font_color', Color.BLACK)
 	b.add_theme_stylebox_override("normal", style)
 	return b
 

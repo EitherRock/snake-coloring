@@ -14,6 +14,8 @@ const BACKGROUND_COLOR := Color("ffffffff")
 @onready var pictures: Node2D = $Pictures
 @onready var placement: PlacementController = $PlacementController
 
+#var current_pattern := "radial"
+var target_region: Node2D = null  # the region the Pattern menu applies to
 
 func _ready() -> void:
 	RenderingServer.set_default_clear_color(BACKGROUND_COLOR)
@@ -38,9 +40,13 @@ func _place_picture(data: PictureData, world_pos: Vector2) -> void:
 	pic.confirmed = false  # set before add_child so _ready() starts it pending
 	pic.scale = Vector2.ONE * picture_scale
 	pic.position = world_pos - data.size * picture_scale / 2.0
+	#pic.pattern_id = current_pattern
+	
+	pic.region_selected.connect(_on_region_selected)
+	
 	pictures.add_child(pic)
 	placement.begin(pic)
-
+	
 
 # ---------------------------------------------------------------------------
 # Signal callbacks
@@ -49,7 +55,13 @@ func _on_picture_dropped(data: PictureData, world_pos: Vector2) -> void:
 	_place_picture(data, world_pos)
 
 
+func _on_region_selected(region: Node2D) -> void:
+	if not region.picture_manager.confirmed:
+		return  # ignore pictures that are still being placed
+	target_region = region
+
 func _on_pattern_chosen(id: String) -> void:
-	for pic in pictures.get_children():
-		if pic.has_method("set_pattern"):
-			pic.set_pattern(id)
+	if not is_instance_valid(target_region):
+		return
+	target_region.set_pattern(id)
+	target_region.glow_pulse()  # shows which region changed

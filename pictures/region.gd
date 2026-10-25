@@ -2,7 +2,8 @@ class_name Region
 extends Node2D
 
 const MAX_BANDS := 10  # must match MAX_BANDS in region_fill.gdshader
-const DEBUG_BOUNDS := true  # set to false when done debugging stuff
+const DEBUG_BOUNDS := false  # set to false when done debugging stuff
+const PATTERN_IDS := {"radial": 0, "linear": 1, "spiral": 2, "checker": 3, "clock": 4, "diamond": 5}
 
 @export var max_dots: int = 50
 
@@ -19,6 +20,8 @@ var fill_origin_px: Vector2 = Vector2.ZERO
 var mask_image: Image
 
 var bounds_origin := Vector2.ZERO  # top-left of the box, in picture pixels
+
+var pattern_id: String = "radial"
 
 @onready var fill_effect: ColorRect = $FillEffect
 @onready var fill_material: ShaderMaterial = fill_effect.material.duplicate()
@@ -60,6 +63,7 @@ func setup(data: RegionData, picture_size: Vector2) -> void:
 	fill_material.set_shader_parameter("mask_size", box_size)
 	fill_material.set_shader_parameter("fill_origin", (fill_origin_px - bounds_origin) / box_size)
 	fill_material.set_shader_parameter("max_distance", data.max_distance)
+	fill_material.set_shader_parameter("checker_size", clampf(minf(box_size.x, box_size.y) / 4.0, 12.0, 64.0))
 	queue_redraw()
 
 
@@ -96,6 +100,10 @@ func deposit_dot(dot_color: Color) -> void:
 		if picture_manager:
 			picture_manager.on_region_filled(self)
 
+
+func set_pattern(id: String) -> void:
+	pattern_id = id
+	fill_material.set_shader_parameter("pattern", PATTERN_IDS.get(id, 0))
 
 # ---------------------------------------------------------------------------
 # Selection
